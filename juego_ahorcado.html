@@ -5,18 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego del Ahorcado</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"> <!-- Fuente manuscrita -->
     <script>
-        const palabras = ["BIENVENIDO", "CIUDAD", "CAMPO", "DEPARTAMENTOS", "PROGRAMACION", "COMPUTADORA","ANIMACIONES"];
+        // Lista de palabras con sus respectivas categorías (temas)
+        const temas = {
+            "Ciudades": ["AUTOMOVILES", "CIUDADES", "HOSPITALES", "HOTELERIA", "COMERCIO"],
+            "Animación": ["ANIMACION","COMPUTADORA", "PROGRAMACION"],
+            "Profesiones": ["CONTADOR", "MEDICO", "ABOGADO", "INGENIERO","ARQUITECTO"]
+        };
+
         let palabraSeleccionada = '';
         let letrasIncorrectas = [];
         let letrasCorrectas = [];
         let intentos = 6;
+        let temaSeleccionado = '';
 
         const gifsCorrectos = ["a0e8cce5296302f25dbc178d91626d47.gif", "aplausos.gif", "homer-simpson-icegif-10.gif"];
         const gifsIncorrectos = ["no-no-no.gif", "M3gMmi6.gif", "200w.gif"];
 
         function iniciarJuego() {
-            palabraSeleccionada = palabras[Math.floor(Math.random() * palabras.length)];
+            // Seleccionar aleatoriamente un tema y una palabra dentro de ese tema
+            const temasDisponibles = Object.keys(temas);
+            temaSeleccionado = temasDisponibles[Math.floor(Math.random() * temasDisponibles.length)];
+            palabraSeleccionada = temas[temaSeleccionado][Math.floor(Math.random() * temas[temaSeleccionado].length)];
+            
             letrasIncorrectas = [];
             letrasCorrectas = [];
             intentos = 6;
@@ -27,10 +39,14 @@
             document.getElementById("muñeco").src = '';
             document.getElementById("gifResultado").style.display = 'none';
 
+            // Mostrar tema en la interfaz
+            document.getElementById("tema").innerText = `Tema: ${temaSeleccionado}`;
+
+            // Mostrar saludo con "Hola"
             const nombreUsuario = localStorage.getItem('nombreUsuario');
             const generoUsuario = localStorage.getItem('generoUsuario');
             if (nombreUsuario) {
-                const saludo = generoUsuario === 'mujer' ? `Bienvenida, ${nombreUsuario}!` : `Bienvenido, ${nombreUsuario}!`;
+                const saludo = `Hola, ${nombreUsuario}!`;  // Cambié "Bienvenido" por "Hola"
                 document.getElementById("bienvenida").innerText = saludo;
             }
         }
@@ -139,7 +155,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
-        #palabra, #intentos, #resultado {
+        #palabra, #intentos, #resultado, #tema {
             font-size: 2em;
             margin: 20px 0;
         }
@@ -168,11 +184,23 @@
                 width: 80px; 
             }
         }
+
+        /* Estilos para el Footer */
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-family: 'Pacifico', cursive;
+            font-size: 20px;
+            color: #fff;
+            letter-spacing: 5px; /* Espaciado entre las letras */
+        }
     </style>
 </head>
 <body>
     <h1>Juego del Ahorcado</h1>
     <div id="bienvenida"></div>
+    <div id="tema"></div> <!-- Aquí se mostrará el tema del juego -->
     <div id="palabra"></div>
     <div id="intentos"></div>
     <input type="text" id="inputLetra" maxlength="1" placeholder="Introduce una letra" />
@@ -182,5 +210,10 @@
     
     <img id="muñeco" src="" alt="" style="width: 200px; margin-top: 30px;" />
     <img id="gifResultado" src="" alt="Resultado del Juego" style="display: none; width: 200px; margin-top: 30px;" />
+
+    <!-- Footer -->
+    <div class="footer">
+        Developer Edison Urrego
+    </div>
 </body>
 </html>
